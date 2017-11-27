@@ -32,12 +32,12 @@ TOKENIZER_RE = re.compile(r"[A-Z]{2,}(?![a-z])|[A-Z][a-z]+(?=[A-Z])|[\'\w\-]+",
 
 def tokenizer(iterator):
 	"""Tokenizer generator.
-    Args:
-      iterator: Input iterator with strings.
+		Args:
+			iterator: Input iterator with strings.
 
-    Yields:
-      array of tokens per each value in the input.
-  """
+		Yields:
+			array of tokens per each value in the input.
+	"""
 	for value in iterator:
 		yield TOKENIZER_RE.findall(value.lower())
 
@@ -55,15 +55,15 @@ class VocabularyProcessor(object):
 							 vocabulary=None,
 							 tokenizer_fn=None):
 		"""Initializes a VocabularyProcessor instance.
-    Args:
-      max_document_length: Maximum length of documents.
-      if documents are longer, they will be trimmed, if shorter - padded.
-      min_frequency: Minimum frequency of words in the vocabulary.
-      vocabulary: CategoricalVocabulary object.
-    Attributes:
-      vocabulary_: Vocabulary object.
+		Args:
+			max_document_length: Maximum length of documents.
+			if documents are longer, they will be trimmed, if shorter - padded.
+			min_frequency: Minimum frequency of words in the vocabulary.
+			vocabulary: CategoricalVocabulary object.
+		Attributes:
+			vocabulary_: Vocabulary object.
 
-    """
+		"""
 		self.max_document_length = max_document_length
 		self.min_frequency = min_frequency
 		if vocabulary:
@@ -78,12 +78,12 @@ class VocabularyProcessor(object):
 	def fit(self, raw_documents):
 		"""Learn a vocabulary dictionary of all tokens in the raw documents.
 
-      Args:
-        raw_documents: An iterable which yield either str or unicode.
+			Args:
+				raw_documents: An iterable which yield either str or unicode.
 
-      Returns:
-        self
-    """
+			Returns:
+				self
+		"""
 		for tokens in self._tokenizer(raw_documents):
 			for token in tokens:
 				self.vocabulary_.add(token)
@@ -94,26 +94,26 @@ class VocabularyProcessor(object):
 
 	def fit_transform(self, raw_documents):
 		"""Learn the vocabulary dictionary and return indexies of words.
-    Args:
-      raw_documents: An iterable which yield either str or unicode.
+		Args:
+			raw_documents: An iterable which yield either str or unicode.
 
-    Returns:
-      x: iterable, [n_samples, max_document_length]. Word-id matrix.
-    """
+		Returns:
+			x: iterable, [n_samples, max_document_length]. Word-id matrix.
+		"""
 		self.fit(raw_documents)
 		return self.transform(raw_documents)
 
 	def transform(self, raw_documents):
 		"""Transform documents to word-id matrix.
-      Convert words to ids with vocabulary fitted with fit or the one
-      provided in the constructor.
+			Convert words to ids with vocabulary fitted with fit or the one
+			provided in the constructor.
 
-      Args:
-        raw_documents: An iterable which yield either str or unicode.
+			Args:
+				raw_documents: An iterable which yield either str or unicode.
 
-      Yields:
-        x: iterable, [n_samples, max_document_length]. Word-id matrix.
-    """
+			Yields:
+				x: iterable, [n_samples, max_document_length]. Word-id matrix.
+		"""
 		for tokens in self._tokenizer(raw_documents):
 			word_ids = np.ones(self.max_document_length, np.int64)  # default addtional missing slot use pad
 			for idx, token in enumerate(tokens):
@@ -126,29 +126,27 @@ class VocabularyProcessor(object):
 	def reverse(self, documents):
 		"""Reverses output of vocabulary mapping to words.
 
-      Args:
-        documents: iterable, list of class ids.
+			Args:
+				documents: iterable, list of class ids.
 
-      Yields:
-        Iterator over mapped in words documents.
-    """
+			Yields:
+				Iterator over mapped in words documents.
+		"""
 		for item in documents:
 			output = []
 			for class_id in item:
 				output.append(self.vocabulary_.reverse(class_id))
 			yield ' '.join(output)
 
-	# def get_word2index(self):
-	# 	return self.vocabulary_._mapping
 
 	def prepare_embedding_matrix(self, embedding_filepath):
 		"""
-    after fit the doc, prepare the corresponding embedding
-    matrix of which the index is consistent with word index.
-    :param embedding_filepath|str: embedding file path, embedding could be either binary or text
-    :return: embedding_matrix|np.array, embedding_matrix which vector index is consistent
-                                with word index in vocab after trim
-    """
+			after fit the doc, prepare the corresponding embedding
+			matrix of which the index is consistent with word index.
+			:param embedding_filepath|str: embedding file path, embedding could be either binary or text
+			:return: embedding_matrix|np.array, embedding_matrix which vector index is consistent
+																	with word index in vocab after trim
+		"""
 
 		def check_emb_dim():
 			with open(embedding_filepath, 'r') as fin:  # TODO binary load
@@ -178,26 +176,21 @@ class VocabularyProcessor(object):
 
 	def save(self, filename):
 		"""Saves vocabulary processor into given file.
-      Args:
-      filename: Path to output file.
-    """
+		Args:
+			filename: Path to output file.
+		"""
 		with open(filename, 'wb') as f:
 			f.write(pickle.dumps(self))
 
 	@classmethod
 	def restore(cls, filename):
 		"""Restores vocabulary processor from given file.
-      Args:
-        filename: Path to file to load from.
+		Args:
+			filename: Path to file to load from.
 
-      Returns:
-        VocabularyProcessor object.
-    """
+		Returns:
+			VocabularyProcessor object.
+		"""
 		with open(filename, 'rb') as f:
 			return pickle.loads(f.read())
 
-
-if __name__ == "__main__":
-	print list(tokenizer("__START__ We like it very much __UNK__ __END__".split()))
-# this means user has to pre-process their input for special tokens by themselves and
-# based on __TOKEN_NAME__, not <> given the TOKENIZER_RE
