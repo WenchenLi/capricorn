@@ -9,6 +9,7 @@ To be more specifically, it helps:
 # getting started
 ```python
 import nlp_vocab
+import os
 
 
 Vocab_path = "vocab_processor"
@@ -30,7 +31,7 @@ else: # build vocab
 	max_document_length = 11
 	min_freq_filter = 2
 
-	vocab_processor = nlp_vocab.VocabularyProcessor(max_document_length, min_frequency=min_freq_filter)
+	vocab_processor = nlp_vocab.VocabularyProcessor(max_document_length=max_document_length, min_frequency=min_freq_filter)
 	vocab_processor.fit(x_text)
 	vocab_processor.save(Vocab_path)
 	print "vocab_processor saved at:", Vocab_path
