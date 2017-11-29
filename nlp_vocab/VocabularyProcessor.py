@@ -17,9 +17,13 @@
 Tokenizer for processing the corpus
 
 """
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import re
 import numpy as np
-from Vocab import Vocabulary
+from nlp_vocab.Vocab import Vocabulary
 
 try:
 	import cPickle as pickle
@@ -62,7 +66,6 @@ class VocabularyProcessor(object):
 			vocabulary: CategoricalVocabulary object.
 		Attributes:
 			vocabulary_: Vocabulary object.
-
 		"""
 		self.max_document_length = max_document_length
 		self.min_frequency = min_frequency
@@ -78,11 +81,11 @@ class VocabularyProcessor(object):
 	def fit(self, raw_documents):
 		"""Learn a vocabulary dictionary of all tokens in the raw documents.
 
-			Args:
-				raw_documents: An iterable which yield either str or unicode.
+		Args:
+			raw_documents: An iterable which yield either str or unicode.
 
-			Returns:
-				self
+		Returns:
+			self
 		"""
 		for tokens in self._tokenizer(raw_documents):
 			for token in tokens:
@@ -94,11 +97,11 @@ class VocabularyProcessor(object):
 
 	def fit_transform(self, raw_documents):
 		"""Learn the vocabulary dictionary and return indexies of words.
-		Args:
-			raw_documents: An iterable which yield either str or unicode.
+			Args:
+				raw_documents: An iterable which yield either str or unicode.
 
-		Returns:
-			x: iterable, [n_samples, max_document_length]. Word-id matrix.
+			Returns:
+				x: iterable, [n_samples, max_document_length]. Word-id matrix.
 		"""
 		self.fit(raw_documents)
 		return self.transform(raw_documents)
@@ -138,21 +141,19 @@ class VocabularyProcessor(object):
 				output.append(self.vocabulary_.reverse(class_id))
 			yield ' '.join(output)
 
-
 	def prepare_embedding_matrix(self, embedding_filepath):
 		"""
-			after fit the doc, prepare the corresponding embedding
-			matrix of which the index is consistent with word index.
-			:param embedding_filepath|str: embedding file path, embedding could be either binary or text
-			:return: embedding_matrix|np.array, embedding_matrix which vector index is consistent
-																	with word index in vocab after trim
+		after fit the doc, prepare the corresponding embedding
+		matrix of which the index is consistent with word index.
+		:param embedding_filepath|str: embedding file path, embedding could be either binary or text
+		:return: embedding_matrix|np.array, embedding_matrix which vector index is consistent
+																with word index in vocab after trim
 		"""
-
 		def check_emb_dim():
 			with open(embedding_filepath, 'r') as fin:  # TODO binary load
 				for i, value in enumerate(fin):
 					if i == 0: continue  # might be header
-					values = np.asarray(line.split()[1:], dtype='float32')
+					values = np.asarray(value.split()[1:], dtype='float32')
 					return values.shape[0]
 
 		assert self.vocabulary_.get_freeze_state() == True, \
@@ -166,17 +167,18 @@ class VocabularyProcessor(object):
 		with open(embedding_filepath, 'r') as f:  # TODO binary load
 			for line in f:
 				values = line.split()
-				word = values[0]
+				word = values[:len(values)-embedding_dim]
+				word = " ".join(word)
 				word_index = self.vocabulary_.get(word)
 				if word_index != self.vocabulary_.UNK_id:  # if embedding words in vocab, load
-					vector = np.asarray(values[1:], dtype='float32')
+					vector = np.asarray(values[-embedding_dim:], dtype='float32')
 					embedding_matrix[word_index] = vector
 
 		return embedding_matrix
 
 	def save(self, filename):
 		"""Saves vocabulary processor into given file.
-		Args:
+			Args:
 			filename: Path to output file.
 		"""
 		with open(filename, 'wb') as f:
@@ -185,12 +187,11 @@ class VocabularyProcessor(object):
 	@classmethod
 	def restore(cls, filename):
 		"""Restores vocabulary processor from given file.
-		Args:
-			filename: Path to file to load from.
+			Args:
+				filename: Path to file to load from.
 
-		Returns:
-			VocabularyProcessor object.
+			Returns:
+				VocabularyProcessor object.
 		"""
 		with open(filename, 'rb') as f:
 			return pickle.loads(f.read())
-
