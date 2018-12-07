@@ -14,10 +14,10 @@
 # ==============================================================================
 
 """
-init nlp_vocab
+init capricorn
 """
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from nlp_vocab.VocabularyProcessor import VocabularyProcessor
+from capricorn.VocabularyProcessor import VocabularyProcessor

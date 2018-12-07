@@ -1,4 +1,7 @@
-# NLP vocab
+![alt text](img_src/Capricorn_icon_sml.png)
+
+# capricorn
+
 NLP vocab is a lightweight library for helping prepare vocabulary from 
 corpus and prepare word embedding ready to be used by learning models.
 
@@ -7,7 +10,7 @@ corpus and prepare word embedding ready to be used by learning models.
 
 ## getting started
 ```python
-import nlp_vocab
+import capricorn
 import os
 
 # Specify filepaths
@@ -17,7 +20,7 @@ embedding_vector_path = "data/embedding/model.vec"
 # Load vocab
 if os.path.isfile(Vocab_path):
     print("Loading Vocabulary ...")
-    vocab_processor = nlp_vocab.VocabularyProcessor.restore(Vocab_path)
+    vocab_processor = capricorn.VocabularyProcessor.restore(Vocab_path)
 
 else: # build vocab
 	print("Building Vocabulary ...")
@@ -30,7 +33,7 @@ else: # build vocab
 	max_document_length = 11
 	min_freq_filter = 2
 
-	vocab_processor = nlp_vocab.VocabularyProcessor(max_document_length=max_document_length, min_frequency=min_freq_filter)
+	vocab_processor = capricorn.VocabularyProcessor(max_document_length=max_document_length, min_frequency=min_freq_filter)
 	vocab_processor.fit(x_text)
 	vocab_processor.save(Vocab_path)
 	print "vocab_processor saved at:", Vocab_path

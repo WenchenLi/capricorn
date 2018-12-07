@@ -22,7 +22,7 @@ from __future__ import print_function
 
 import re
 import numpy as np
-from nlp_vocab.Vocab import Vocabulary
+from capricorn.Vocab import Vocabulary
 
 try:
   import cPickle as pickle
