@@ -1,4 +1,9 @@
-![alt text](img_src/Capricorn_icon_sml.png)
+
+<div align="center">
+  <img src="img_src/Capricorn_icon_sml.png"><br><br>
+</div>
+
+-----------------
 
 # capricorn
 
