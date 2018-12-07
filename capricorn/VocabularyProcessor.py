@@ -23,6 +23,7 @@ from __future__ import print_function
 import re
 import numpy as np
 from capricorn.Vocab import Vocabulary
+import io
 
 try:
   import cPickle as pickle
@@ -150,7 +151,7 @@ class VocabularyProcessor(object):
     """
 
     def check_emb_dim():
-      with open(embedding_filepath, 'r') as fin:  # TODO binary load
+      with io.open(embedding_filepath, 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:  # TODO binary load
         for i, value in enumerate(fin):
           if i == 0: continue  # might be header
           values = np.asarray(value.split()[1:], dtype='float32')
@@ -164,7 +165,7 @@ class VocabularyProcessor(object):
     embedding_matrix = np.zeros((num_words, embedding_dim))
 
     # load and add necessary embedding
-    with open(embedding_filepath, 'r') as f:  # TODO binary load
+    with io.open(embedding_filepath, 'r', encoding='utf-8', newline='\n', errors='ignore') as f:  # TODO binary load
       for line in f:
         values = line.split()
         word = values[:len(values) - embedding_dim]
