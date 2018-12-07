@@ -26,12 +26,12 @@ import collections
 import six
 
 # Special tokens
-# PARAGRAPH_START = '__PS__'
-# PARAGRAPH_END = '__PE__'
-# SENTENCE_START = '__SS__'
-# SENTENCE_END = '__SE__'
-# DOCUMENT_START = '__DS__'
-# DOCUMENT_END = '__DE__'
+PARAGRAPH_START = '__PS__'
+PARAGRAPH_END = '__PE__'
+SENTENCE_START = '__SS__'
+SENTENCE_END = '__SE__'
+DOCUMENT_START = '__DS__'
+DOCUMENT_END = '__DE__'
 UNKNOWN_TOKEN = '__UNK__'
 PAD_TOKEN = '__PAD__'
 

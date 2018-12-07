@@ -2,23 +2,22 @@
 NLP vocab is a lightweight library for helping prepare vocabulary from 
 corpus and prepare word embedding ready to be used by learning models.
 
-To be more specifically, it helps:
 1. build vocabulary from corpus
 2. load necessary word embedding with consistent word index in Vocabulary
 
-# getting started
+## getting started
 ```python
 import nlp_vocab
 import os
 
-
+# Specify filepaths
 Vocab_path = "vocab_processor"
 embedding_vector_path = "data/embedding/model.vec"
 
 # Load vocab
 if os.path.isfile(Vocab_path):
-	print("Loading Vocabulary ...")
-	vocab_processor = nlp_vocab.VocabularyProcessor.restore(Vocab_path)
+    print("Loading Vocabulary ...")
+    vocab_processor = nlp_vocab.VocabularyProcessor.restore(Vocab_path)
 
 else: # build vocab
 	print("Building Vocabulary ...")
@@ -58,9 +57,3 @@ sentence from:
 to:
 
 "\_\_START__ \_\_PAD__ \_\_PAD__  We like it very much \_\_PAD__ \_\_PAD__ \_\_END__"
-
-## Support language [under development]
-
-Currently focus on support English and Chinese,
-these two type can be later generalized to language pipeline
-whether needs words segmentation.   
