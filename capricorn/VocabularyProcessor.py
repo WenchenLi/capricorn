@@ -205,7 +205,7 @@ class VocabularyProcessor(object):
     if dim> embedding_dim:
       logging.warning("dim is {}, which is bigger than embedding_dim:{}".format(dim,embedding_dim))
 
-    embedding_matrix = np.zeros((num_words, embedding_dim))
+    embedding_matrix = np.zeros((num_words, dim))
 
     # load and add necessary embedding
     with io.open(embedding_filepath, 'r', encoding='utf-8', newline='\n', errors='ignore') as f:  # TODO binary load
