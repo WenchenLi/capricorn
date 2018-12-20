@@ -24,6 +24,7 @@ import re
 import numpy as np
 from capricorn.Vocab import Vocabulary
 import io
+import logging
 
 try:
   import cPickle as pickle
@@ -173,6 +174,48 @@ class VocabularyProcessor(object):
         word_index = self.vocabulary_.get(word)
         if word_index != self.vocabulary_.UNK_id:  # if embedding words in vocab, load
           vector = np.asarray(values[-embedding_dim:], dtype='float32')
+          embedding_matrix[word_index] = vector
+
+    return embedding_matrix
+
+  def prepare_embedding_matrix_with_dim(self, embedding_filepath, dim):
+    """
+    prepare embedding given specific number of dims, original embedding dim is the upper bound for dim
+
+
+    :param embedding_filepath|str: embedding file path, embedding could be either binary or text
+    :param dim|int: number of dimension to be used, if < full dim, use first number of dims for embedding
+    :return: embedding_matrix|np.array, embedding_matrix which vector index is consistent
+                                with word index in vocab after trim
+    """
+
+    def check_emb_dim():
+      with io.open(embedding_filepath, 'r', encoding='utf-8', newline='\n', errors='ignore') as fin:  # TODO binary load
+        for i, value in enumerate(fin):
+          if i == 0: continue  # might be header
+          values = np.asarray(value.split()[1:], dtype='float32')
+          return values.shape[0]
+
+    assert self.vocabulary_.get_freeze_state() == True, \
+      "vocabulary should be freezed before prepare embedding"
+
+    num_words = self.vocabulary_.__len__()
+    embedding_dim = check_emb_dim()
+
+    if dim> embedding_dim:
+      logging.warning("dim is {}, which is bigger than embedding_dim:{}".format(dim,embedding_dim))
+
+    embedding_matrix = np.zeros((num_words, embedding_dim))
+
+    # load and add necessary embedding
+    with io.open(embedding_filepath, 'r', encoding='utf-8', newline='\n', errors='ignore') as f:  # TODO binary load
+      for line in f:
+        values = line.split()
+        word = values[:len(values) - embedding_dim]
+        word = " ".join(word)
+        word_index = self.vocabulary_.get(word)
+        if word_index != self.vocabulary_.UNK_id:  # if embedding words in vocab, load
+          vector = np.asarray(values[-embedding_dim:-embedding_dim + dim], dtype='float32')
           embedding_matrix[word_index] = vector
 
     return embedding_matrix
