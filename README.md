@@ -7,13 +7,18 @@
 
 # capricorn
 
-NLP vocab is a lightweight library for helping prepare vocabulary from 
+capricorn is a lightweight library for helping prepare vocabulary from
 corpus and prepare word embedding ready to be used by learning models.
 
 1. build vocabulary from corpus
 2. load necessary word embedding with consistent word index in Vocabulary
 
+
 ## getting started
+```
+pip install capricorn
+```
+
 ```python
 import capricorn
 import os
@@ -39,7 +44,7 @@ else: # build vocab
 	min_freq_filter = 2
 
 	vocab_processor = capricorn.VocabularyProcessor(max_document_length=max_document_length, min_frequency=min_freq_filter)
-	vocab_processor.fit(x_text)
+	vocab_processor.fit(x_text) # fit_transform to get the transformed corpus
 	vocab_processor.save(Vocab_path)
 	print "vocab_processor saved at:", Vocab_path
 

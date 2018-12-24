@@ -8,8 +8,8 @@ import io
 import os
 import sys
 from shutil import rmtree
-
 from setuptools import find_packages, setup, Command
+from distutils.core import setup
 
 # Package meta-data.
 NAME = 'capricorn'
@@ -18,7 +18,7 @@ URL = 'https://github.com/WenchenLi/capricorn'
 EMAIL = 'wenchen.li.cs@example.com'
 AUTHOR = 'Wenchen Li'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = 0.1
+VERSION = "0.1.1"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -104,9 +104,8 @@ setup(
     url=URL,
     packages=find_packages(exclude=('tests',)),
     # If your package is a single module, use this instead of 'packages':
-    # py_modules=['mypackage'],
-
-    # entry_points={
+    py_modules=['capricorn'],
+    # entry_points={ TODO entry points
     #     'console_scripts': ['mycli=mymodule:cli'],
     # },
     install_requires=REQUIRED,
@@ -119,7 +118,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
