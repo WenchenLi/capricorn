@@ -25,31 +25,35 @@ import os
 
 # Specify filepaths
 Vocab_path = "vocab_processor"
-embedding_vector_path = "data/embedding/model.vec"
+embedding_vector_path = "path/to/embedding"
 
 # Load vocab
 if os.path.isfile(Vocab_path):
-    print("Loading Vocabulary ...")
-    vocab_processor = capricorn.VocabularyProcessor.restore(Vocab_path)
+  print("Loading Vocabulary ...")
+  vocab_processor = capricorn.VocabularyProcessor.restore(Vocab_path)
 
-else: # build vocab
-	print("Building Vocabulary ...")
-	
-	x_text = ["Saudi Arabia Equity Movers: Almarai, Jarir Marketing and Spimaco.",
-                        "Orange, Thales to Get French Cloud Computing Funds, Figaro Says.",
-                        "Stansted Could Double Passengers on Deregulation, Times Reports."]
+else:  # build vocab
+  print("Building Vocabulary ...")
 
-	# Build/load vocabulary
-	max_document_length = 11
-	min_freq_filter = 2
+  x_text = ["Saudi Arabia Equity Movers: Almarai, Jarir Marketing and Spimaco.",
+            "Orange, Thales to Get French Cloud Computing Funds, Figaro Says.",
+            "Stansted Could Double Passengers on Deregulation, Times Reports."]
 
-	vocab_processor = capricorn.VocabularyProcessor(max_document_length=max_document_length, min_frequency=min_freq_filter)
-	vocab_processor.fit(x_text) # fit_transform to get the transformed corpus
-	vocab_processor.save(Vocab_path)
-	print "vocab_processor saved at:", Vocab_path
+  # Build/load vocabulary
+  max_document_length = 11
+  min_freq_filter = 2
 
-# build embedding matrix of which the index is consistent with vocab word2index mapping	
-embedding_matrix = vocab_processor.prepare_embedding_matrix(embedding_vector_path)
+  vocab_processor = capricorn.VocabularyProcessor(max_document_length=max_document_length,
+                                                  min_frequency=min_freq_filter)
+  # only fit
+  # vocab_processor.fit(x_text)
+  # or fit_transform to get the transformed corpus
+  x_text_transformed = vocab_processor.fit_transform(x_text)
+  vocab_processor.save(Vocab_path)
+  print("vocab_processor saved at:", Vocab_path)
+
+# build embedding matrix of which the index is consistent with vocab word2index mapping
+embedding_matrix = vocab_processor.prepare_embedding_matrix_with_dim(embedding_vector_path, 300)
 
 ```
 # User input

@@ -135,7 +135,7 @@ class Vocabulary(object):
       idx += 1
       if self._support_reverse:
         self._reverse_mapping.append(category)
-    self._freq = dict(self._freq[:idx - 1])  # TODO figure out why add this
+    self._freq = dict(self._freq[:idx - 1])
 
   def reverse(self, class_id):
     """Given class id reverse to original class name.

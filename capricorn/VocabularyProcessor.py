@@ -119,12 +119,17 @@ class VocabularyProcessor(object):
         x: iterable, [n_samples, max_document_length]. Word-id matrix.
     """
     for tokens in self._tokenizer(raw_documents):
-      word_ids = np.ones(self.max_document_length, np.int64)  # default addtional missing slot use pad
+      word_ids = np.ones(self.max_document_length, np.int64)  # default additional missing slot use pad
+      len_tokens = len(tokens)
+      start_index = int((self.max_document_length - len_tokens + 1)/2)
+      temp = []
       for idx, token in enumerate(tokens):
         if idx >= self.max_document_length:
           break  # cut exceeding part, this means user,given their special tokens, need to add their own
-        # special tokens by themself before
-        word_ids[idx] = self.vocabulary_.get(token)
+        # special tokens by themselves before
+        temp.append(self.vocabulary_.get(token))
+
+      word_ids[start_index:len_tokens+start_index] = temp
       yield word_ids
 
   def reverse(self, documents):
