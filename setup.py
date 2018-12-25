@@ -10,15 +10,16 @@ import sys
 from shutil import rmtree
 from setuptools import find_packages, setup, Command
 from distutils.core import setup
+from .capricorn import __version__
 
 # Package meta-data.
 NAME = 'capricorn'
 DESCRIPTION = 'nlp vocabulary builder and embedding loader'
 URL = 'https://github.com/WenchenLi/capricorn'
-EMAIL = 'wenchen.li.cs@example.com'
+EMAIL = 'wenchen.li.cs@gmail.com'
 AUTHOR = 'Wenchen Li'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = "0.1.1"
+VERSION = __version__
 
 # What packages are required for this module to be executed?
 REQUIRED = [
