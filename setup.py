@@ -10,7 +10,7 @@ import sys
 from shutil import rmtree
 from setuptools import find_packages, setup, Command
 from distutils.core import setup
-from .capricorn import __version__
+from capricorn import __version__
 
 # Package meta-data.
 NAME = 'capricorn'
@@ -19,7 +19,7 @@ URL = 'https://github.com/WenchenLi/capricorn'
 EMAIL = 'wenchen.li.cs@gmail.com'
 AUTHOR = 'Wenchen Li'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = __version__
+VERSION = "0.1.2"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
